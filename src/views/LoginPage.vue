@@ -45,7 +45,6 @@
           />
         </div>
       </form>
-      <p class="login__copyright">© 2021 Design by Away</p>
     </div>
     <p class="login__status login__status-success" v-if="loginStatus === 1">
       登入成功
