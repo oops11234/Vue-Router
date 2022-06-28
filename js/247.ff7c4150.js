@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue_wells_13"]=self["webpackChunkvue_wells_13"]||[]).push([[247],{2940:function(e,t,s){s.r(t),s.d(t,{default:function(){return i}});var l,a,n=s(5801),u=s(6166),r=s.n(u),o={extends:n.Z,data(){return{title:"會員列表"}},async created(){try{this.setIsShow(),this.data=await r().get("https://randomuser.me/api/?seed=foobar&results=150").then((e=>e.data.results)).catch((e=>console.log(e))),this.setIsShow()}catch(e){console.log(e)}}},c=o,h=s(3736),d=(0,h.Z)(c,l,a,!1,null,null,null),i=d.exports}}]);
+//# sourceMappingURL=247.ff7c4150.js.map
