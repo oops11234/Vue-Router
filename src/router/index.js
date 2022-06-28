@@ -1,29 +1,55 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import Cookie from 'js-cookie';
+import store from '@/store';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView,
+    path: '*',
+    redirect: '/',
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    path: '/',
+    component: () => import('@/views/HomePage.vue'),
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/LoginPage.vue'),
+  },
+  {
+    path: '/admin',
+    component: () => import('@/views/AdminPage.vue'),
+    meta: { requireAuth: true },
+  },
+  {
+    path: '/customer',
+    component: () => import('@/views/CustomerPage.vue'),
+    meta: { requireAuth: true },
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth && Cookie.get('token')) {
+    store.dispatch('setSelected', JSON.parse(localStorage.getItem('selected')) || []);
+    const { getSelected } = store.getters;
+    if (to.path === '/customer' && (!getSelected || !getSelected.length)) {
+      next('admin');
+    } else {
+      next();
+    }
+  } else if (to.meta.requireAuth && !Cookie.get('token')) {
+    next('/login');
+  } else {
+    Cookie.get('token') && to.path === '/login' ? next('admin') : next();
+  }
 });
 
 export default router;
